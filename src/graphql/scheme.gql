@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Inverter {
+  id: Int!
+  inverterCode: String!
+  inverterName: String!
+  slaveAddress: String!
+  startAddress: String!
+  numberOfPoles: Float!
+  updatedAt: DateTime!
+  isFlag: Boolean!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PageInverter {
+  data: [Inverter!]!
+  totalElements: Int!
+  pages: Int!
+  size: Int!
+  isLast: Boolean!
+}
+
+type Query {
+  getInverts(page: Int = 0, size: Int = 10, sortBy: String = "id", orderBy: String = "desc", inverterCode: String, inverterName: String, isFlag: Boolean): PageInverter!
+  getInvert(id: Int!): Inverter!
+}
+
+type Mutation {
+  createInverter(createInverter: CreateInverterInput!): Inverter!
+  updateInverter(id: Float!, createInverter: CreateInverterInput!): Inverter!
+}
+
+input CreateInverterInput {
+  inverterCode: String!
+  inverterName: String!
+  slaveAddress: String!
+  startAddress: String!
+  numberOfPoles: Int!
+  isFlag: Boolean!
+}
