@@ -11,6 +11,9 @@ export function Page<T>(classRef: new () => T) {
 
     @Field(() => Int)
     pages: number;
+    
+    @Field(() => Int)
+    curPage: number;
 
     @Field(() => Int)
     size: number;

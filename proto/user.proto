@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package user;
+
+
+service UserService {
+    rpc getUserInfo(UserInfoRequest) returns(UserInfoResponse);
+    rpc signUpUser(UserSignUpRequest) returns(UserSignUpRespone);
+}
+
+message Empty {
+  
+}
+message UserSignUpRequest {
+    string username= 1;
+    string email=2;
+    string firstName =3;
+    string lastName =4;
+    string password = 5;
+  
+}
+message UserSignUpRespone {
+    int32 id = 1;
+    string username= 2;
+    string email=3;
+    string firstName =4;
+    string lastName =5;
+    string role =6;
+  
+}
+
+message UserInfoRequest {
+    int32 id =1;
+  
+}
+message UserInfoResponse {
+    int32 id = 1;
+    string username= 2;
+    string email=3;
+    string firstName =4;
+    string lastName =5;
+}

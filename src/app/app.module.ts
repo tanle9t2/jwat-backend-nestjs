@@ -8,14 +8,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Inverter } from './inverter/inverter.entity';
 import { typeOrmConfig } from './utils/db.config';
 import { InverterModule } from './inverter/inverter.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ GraphQLModule.forRoot<ApolloDriverConfig>({
-    driver: ApolloDriver,
-    autoSchemaFile: "src/graphql/scheme.gql"
-  }), 
-  TypeOrmModule.forRoot(typeOrmConfig),
-  InverterModule
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'src/graphql/scheme.gql',
+    }),
+    TypeOrmModule.forRoot(typeOrmConfig),
+    InverterModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],

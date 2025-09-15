@@ -22,6 +22,7 @@ type PageInverter {
   data: [Inverter!]!
   totalElements: Int!
   pages: Int!
+  curPage: Int!
   size: Int!
   isLast: Boolean!
 }
@@ -32,8 +33,8 @@ type Query {
 }
 
 type Mutation {
-  createInverter(createInverter: CreateInverterInput!): Inverter!
-  updateInverter(id: Float!, createInverter: CreateInverterInput!): Inverter!
+  createInverter(createInverterInput: CreateInverterInput!): Inverter!
+  updateInverter(id: Int!, createInverterInput: CreateInverterInput!): Inverter!
 }
 
 input CreateInverterInput {

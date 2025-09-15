@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package inverter;
+import "google/protobuf/timestamp.proto";
+
+
+service InverterService {
+  rpc FindAll (Empty) returns (InverterListResponse) {}
+}
+
+message Empty {
+  
+}
+
+message InverterResponse {
+  int32 id = 1;
+  string inverterName = 2;
+  string inverterCode= 3;
+  string slaveAddress=4;
+  string startAddress=5;
+  int32 numberOfPoles=6;
+  google.protobuf.Timestamp updatedAt = 7;
+  bool isFlag =8;
+
+}
+message InverterListResponse {
+  repeated InverterResponse inverters=1;
+  int32 totalElements =2;
+  int32 pages = 3;
+  int32 size = 4;
+  int32 page= 5;
+  bool isLast = 6;
+}
