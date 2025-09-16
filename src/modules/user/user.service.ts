@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { NotFoundException } from '@nestjs/common';
-import { UserSignUpRequest } from '../grpc/generated/user';
+
 import { User } from './user.entity';
 import { RpcException } from '@nestjs/microservices';
 import { status } from '@grpc/grpc-js';
 import * as bcrypt from 'bcrypt';
+import { UserSignUpRequest } from 'src/grpc/generated/user';
 
 export class UserService {
   constructor(

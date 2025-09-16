@@ -9,10 +9,10 @@ import { CreateInverterInput } from './dto/create-inverter.input';
 export class InverterResolver {
   constructor(private readonly inverterService: InverterService) {}
 
-  @Query((returns) => PageInverter)
-  getInverts(@Args() agrs: GetInverterAgrs) {
-    return this.inverterService.findAll(agrs);
-  }
+  // @Query((returns) => PageInverter)
+  // getInverts(@Args() agrs: GetInverterAgrs) {
+  //   return this.inverterService.findAll(agrs);
+  // }
 
   @Query((returns) => Inverter)
   getInvert(@Args('id', { type: () => Int }) id: number) {

@@ -1,9 +1,13 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
-import { Empty, InverterListResponse } from 'src/app/grpc/generated/inverter';
 
 import { status } from '@grpc/grpc-js';
-import { AuthRequset, AuthResponse } from '../grpc/generated/auth';
+import {
+  AuthRequset,
+  AuthResponse,
+  RefreshTokenRequet,
+  RefreshTokenResponse,
+} from '../../grpc/generated/auth';
 import { AuthService } from './auth.service';
 
 @Controller()
@@ -16,5 +20,11 @@ export class AuthController {
     const data = await this.authService.validateUser(username, password);
 
     return data;
+  }
+  @GrpcMethod('AuthService', 'getToken')
+  async getToken(request: RefreshTokenRequet): Promise<RefreshTokenResponse> {
+    const { accessToken } = await this.authService.getTokens(request);
+
+    return { accessToken };
   }
 }

@@ -25,6 +25,16 @@ export const protobufPackage = "inverter";
 export interface Empty {
 }
 
+export interface InvertersRequest {
+  inverterCode?: string | undefined;
+  inverterName?: string | undefined;
+  isFlag?: boolean | undefined;
+  page: number;
+  size: number;
+  sortBy?: string | undefined;
+  orderBy?: string | undefined;
+}
+
 export interface InverterResponse {
   id: number;
   inverterName: string;
@@ -84,6 +94,170 @@ export const Empty: MessageFns<Empty> = {
   },
   fromPartial<I extends Exact<DeepPartial<Empty>, I>>(_: I): Empty {
     const message = createBaseEmpty();
+    return message;
+  },
+};
+
+function createBaseInvertersRequest(): InvertersRequest {
+  return {
+    inverterCode: undefined,
+    inverterName: undefined,
+    isFlag: undefined,
+    page: 0,
+    size: 0,
+    sortBy: undefined,
+    orderBy: undefined,
+  };
+}
+
+export const InvertersRequest: MessageFns<InvertersRequest> = {
+  encode(message: InvertersRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.inverterCode !== undefined) {
+      writer.uint32(10).string(message.inverterCode);
+    }
+    if (message.inverterName !== undefined) {
+      writer.uint32(18).string(message.inverterName);
+    }
+    if (message.isFlag !== undefined) {
+      writer.uint32(24).bool(message.isFlag);
+    }
+    if (message.page !== 0) {
+      writer.uint32(32).int32(message.page);
+    }
+    if (message.size !== 0) {
+      writer.uint32(40).int32(message.size);
+    }
+    if (message.sortBy !== undefined) {
+      writer.uint32(50).string(message.sortBy);
+    }
+    if (message.orderBy !== undefined) {
+      writer.uint32(58).string(message.orderBy);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): InvertersRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseInvertersRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.inverterCode = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.inverterName = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.isFlag = reader.bool();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.page = reader.int32();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.size = reader.int32();
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.sortBy = reader.string();
+          continue;
+        }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.orderBy = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InvertersRequest {
+    return {
+      inverterCode: isSet(object.inverterCode) ? globalThis.String(object.inverterCode) : undefined,
+      inverterName: isSet(object.inverterName) ? globalThis.String(object.inverterName) : undefined,
+      isFlag: isSet(object.isFlag) ? globalThis.Boolean(object.isFlag) : undefined,
+      page: isSet(object.page) ? globalThis.Number(object.page) : 0,
+      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
+      sortBy: isSet(object.sortBy) ? globalThis.String(object.sortBy) : undefined,
+      orderBy: isSet(object.orderBy) ? globalThis.String(object.orderBy) : undefined,
+    };
+  },
+
+  toJSON(message: InvertersRequest): unknown {
+    const obj: any = {};
+    if (message.inverterCode !== undefined) {
+      obj.inverterCode = message.inverterCode;
+    }
+    if (message.inverterName !== undefined) {
+      obj.inverterName = message.inverterName;
+    }
+    if (message.isFlag !== undefined) {
+      obj.isFlag = message.isFlag;
+    }
+    if (message.page !== 0) {
+      obj.page = Math.round(message.page);
+    }
+    if (message.size !== 0) {
+      obj.size = Math.round(message.size);
+    }
+    if (message.sortBy !== undefined) {
+      obj.sortBy = message.sortBy;
+    }
+    if (message.orderBy !== undefined) {
+      obj.orderBy = message.orderBy;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<InvertersRequest>, I>>(base?: I): InvertersRequest {
+    return InvertersRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<InvertersRequest>, I>>(object: I): InvertersRequest {
+    const message = createBaseInvertersRequest();
+    message.inverterCode = object.inverterCode ?? undefined;
+    message.inverterName = object.inverterName ?? undefined;
+    message.isFlag = object.isFlag ?? undefined;
+    message.page = object.page ?? 0;
+    message.size = object.size ?? 0;
+    message.sortBy = object.sortBy ?? undefined;
+    message.orderBy = object.orderBy ?? undefined;
     return message;
   },
 };
@@ -419,8 +593,8 @@ export const InverterServiceService = {
     path: "/inverter.InverterService/FindAll",
     requestStream: false,
     responseStream: false,
-    requestSerialize: (value: Empty): Buffer => Buffer.from(Empty.encode(value).finish()),
-    requestDeserialize: (value: Buffer): Empty => Empty.decode(value),
+    requestSerialize: (value: InvertersRequest): Buffer => Buffer.from(InvertersRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): InvertersRequest => InvertersRequest.decode(value),
     responseSerialize: (value: InverterListResponse): Buffer =>
       Buffer.from(InverterListResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): InverterListResponse => InverterListResponse.decode(value),
@@ -428,21 +602,21 @@ export const InverterServiceService = {
 } as const;
 
 export interface InverterServiceServer extends UntypedServiceImplementation {
-  findAll: handleUnaryCall<Empty, InverterListResponse>;
+  findAll: handleUnaryCall<InvertersRequest, InverterListResponse>;
 }
 
 export interface InverterServiceClient extends Client {
   findAll(
-    request: Empty,
+    request: InvertersRequest,
     callback: (error: ServiceError | null, response: InverterListResponse) => void,
   ): ClientUnaryCall;
   findAll(
-    request: Empty,
+    request: InvertersRequest,
     metadata: Metadata,
     callback: (error: ServiceError | null, response: InverterListResponse) => void,
   ): ClientUnaryCall;
   findAll(
-    request: Empty,
+    request: InvertersRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: InverterListResponse) => void,

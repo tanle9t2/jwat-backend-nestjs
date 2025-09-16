@@ -30,10 +30,19 @@ export interface AuthRequset {
 }
 
 export interface AuthResponse {
-  id: number;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface RefreshTokenRequet {
+  sub: number;
   username: string;
   email: string;
   role: string;
+}
+
+export interface RefreshTokenResponse {
+  accessToken: string;
 }
 
 function createBaseEmpty(): Empty {
@@ -156,13 +165,89 @@ export const AuthRequset: MessageFns<AuthRequset> = {
 };
 
 function createBaseAuthResponse(): AuthResponse {
-  return { id: 0, username: "", email: "", role: "" };
+  return { accessToken: "", refreshToken: "" };
 }
 
 export const AuthResponse: MessageFns<AuthResponse> = {
   encode(message: AuthResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
-      writer.uint32(8).int32(message.id);
+    if (message.accessToken !== "") {
+      writer.uint32(10).string(message.accessToken);
+    }
+    if (message.refreshToken !== "") {
+      writer.uint32(18).string(message.refreshToken);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AuthResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAuthResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.accessToken = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.refreshToken = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AuthResponse {
+    return {
+      accessToken: isSet(object.accessToken) ? globalThis.String(object.accessToken) : "",
+      refreshToken: isSet(object.refreshToken) ? globalThis.String(object.refreshToken) : "",
+    };
+  },
+
+  toJSON(message: AuthResponse): unknown {
+    const obj: any = {};
+    if (message.accessToken !== "") {
+      obj.accessToken = message.accessToken;
+    }
+    if (message.refreshToken !== "") {
+      obj.refreshToken = message.refreshToken;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AuthResponse>, I>>(base?: I): AuthResponse {
+    return AuthResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AuthResponse>, I>>(object: I): AuthResponse {
+    const message = createBaseAuthResponse();
+    message.accessToken = object.accessToken ?? "";
+    message.refreshToken = object.refreshToken ?? "";
+    return message;
+  },
+};
+
+function createBaseRefreshTokenRequet(): RefreshTokenRequet {
+  return { sub: 0, username: "", email: "", role: "" };
+}
+
+export const RefreshTokenRequet: MessageFns<RefreshTokenRequet> = {
+  encode(message: RefreshTokenRequet, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.sub !== 0) {
+      writer.uint32(8).int32(message.sub);
     }
     if (message.username !== "") {
       writer.uint32(18).string(message.username);
@@ -176,10 +261,10 @@ export const AuthResponse: MessageFns<AuthResponse> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): AuthResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): RefreshTokenRequet {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAuthResponse();
+    const message = createBaseRefreshTokenRequet();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -188,7 +273,7 @@ export const AuthResponse: MessageFns<AuthResponse> = {
             break;
           }
 
-          message.id = reader.int32();
+          message.sub = reader.int32();
           continue;
         }
         case 2: {
@@ -224,19 +309,19 @@ export const AuthResponse: MessageFns<AuthResponse> = {
     return message;
   },
 
-  fromJSON(object: any): AuthResponse {
+  fromJSON(object: any): RefreshTokenRequet {
     return {
-      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      sub: isSet(object.sub) ? globalThis.Number(object.sub) : 0,
       username: isSet(object.username) ? globalThis.String(object.username) : "",
       email: isSet(object.email) ? globalThis.String(object.email) : "",
       role: isSet(object.role) ? globalThis.String(object.role) : "",
     };
   },
 
-  toJSON(message: AuthResponse): unknown {
+  toJSON(message: RefreshTokenRequet): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
-      obj.id = Math.round(message.id);
+    if (message.sub !== 0) {
+      obj.sub = Math.round(message.sub);
     }
     if (message.username !== "") {
       obj.username = message.username;
@@ -250,15 +335,73 @@ export const AuthResponse: MessageFns<AuthResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AuthResponse>, I>>(base?: I): AuthResponse {
-    return AuthResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RefreshTokenRequet>, I>>(base?: I): RefreshTokenRequet {
+    return RefreshTokenRequet.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AuthResponse>, I>>(object: I): AuthResponse {
-    const message = createBaseAuthResponse();
-    message.id = object.id ?? 0;
+  fromPartial<I extends Exact<DeepPartial<RefreshTokenRequet>, I>>(object: I): RefreshTokenRequet {
+    const message = createBaseRefreshTokenRequet();
+    message.sub = object.sub ?? 0;
     message.username = object.username ?? "";
     message.email = object.email ?? "";
     message.role = object.role ?? "";
+    return message;
+  },
+};
+
+function createBaseRefreshTokenResponse(): RefreshTokenResponse {
+  return { accessToken: "" };
+}
+
+export const RefreshTokenResponse: MessageFns<RefreshTokenResponse> = {
+  encode(message: RefreshTokenResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.accessToken !== "") {
+      writer.uint32(10).string(message.accessToken);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RefreshTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRefreshTokenResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.accessToken = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RefreshTokenResponse {
+    return { accessToken: isSet(object.accessToken) ? globalThis.String(object.accessToken) : "" };
+  },
+
+  toJSON(message: RefreshTokenResponse): unknown {
+    const obj: any = {};
+    if (message.accessToken !== "") {
+      obj.accessToken = message.accessToken;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RefreshTokenResponse>, I>>(base?: I): RefreshTokenResponse {
+    return RefreshTokenResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RefreshTokenResponse>, I>>(object: I): RefreshTokenResponse {
+    const message = createBaseRefreshTokenResponse();
+    message.accessToken = object.accessToken ?? "";
     return message;
   },
 };
@@ -274,10 +417,21 @@ export const AuthServiceService = {
     responseSerialize: (value: AuthResponse): Buffer => Buffer.from(AuthResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): AuthResponse => AuthResponse.decode(value),
   },
+  getToken: {
+    path: "/auth.AuthService/getToken",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: RefreshTokenRequet): Buffer => Buffer.from(RefreshTokenRequet.encode(value).finish()),
+    requestDeserialize: (value: Buffer): RefreshTokenRequet => RefreshTokenRequet.decode(value),
+    responseSerialize: (value: RefreshTokenResponse): Buffer =>
+      Buffer.from(RefreshTokenResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): RefreshTokenResponse => RefreshTokenResponse.decode(value),
+  },
 } as const;
 
 export interface AuthServiceServer extends UntypedServiceImplementation {
   validateUser: handleUnaryCall<AuthRequset, AuthResponse>;
+  getToken: handleUnaryCall<RefreshTokenRequet, RefreshTokenResponse>;
 }
 
 export interface AuthServiceClient extends Client {
@@ -295,6 +449,21 @@ export interface AuthServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: AuthResponse) => void,
+  ): ClientUnaryCall;
+  getToken(
+    request: RefreshTokenRequet,
+    callback: (error: ServiceError | null, response: RefreshTokenResponse) => void,
+  ): ClientUnaryCall;
+  getToken(
+    request: RefreshTokenRequet,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: RefreshTokenResponse) => void,
+  ): ClientUnaryCall;
+  getToken(
+    request: RefreshTokenRequet,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: RefreshTokenResponse) => void,
   ): ClientUnaryCall;
 }
 

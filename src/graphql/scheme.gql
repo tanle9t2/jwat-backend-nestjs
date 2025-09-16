@@ -18,17 +18,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type PageInverter {
-  data: [Inverter!]!
-  totalElements: Int!
-  pages: Int!
-  curPage: Int!
-  size: Int!
-  isLast: Boolean!
-}
-
 type Query {
-  getInverts(page: Int = 0, size: Int = 10, sortBy: String = "id", orderBy: String = "desc", inverterCode: String, inverterName: String, isFlag: Boolean): PageInverter!
   getInvert(id: Int!): Inverter!
 }
 

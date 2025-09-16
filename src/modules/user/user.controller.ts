@@ -6,7 +6,7 @@ import {
   UserInfoResponse,
   UserSignUpRequest,
   UserSignUpRespone,
-} from '../grpc/generated/user';
+} from '../../grpc/generated/user';
 
 @Controller()
 export class UserController {

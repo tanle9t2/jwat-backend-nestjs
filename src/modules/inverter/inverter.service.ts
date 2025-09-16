@@ -11,9 +11,10 @@ import { PageInverter } from './dto/page-inverter.dto';
 import {
   InverterListResponse,
   InverterResponse,
-} from '../grpc/generated/inverter';
+  InvertersRequest,
+} from '../../grpc/generated/inverter';
 
-import { dateToTimestamp } from '../utils/helper';
+import { dateToTimestamp } from '../../utils/helper';
 import { Inverter } from './inverter.entity';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class InverterService {
     private readonly inverterRepository: Repository<Inverter>,
   ) {}
 
-  async findAll(agrs): Promise<InverterListResponse> {
+  async findAll(agrs: InvertersRequest): Promise<InverterListResponse> {
     const query = this.inverterRepository.createQueryBuilder('inverter');
     const { page, size, sortBy, orderBy, inverterCode, inverterName, isFlag } =
       agrs;
@@ -41,7 +42,10 @@ export class InverterService {
     const offset = page * size;
 
     query.skip(offset).take(size);
-    // query.orderBy(`inverter.${sortBy}`, (orderBy?.toUpperCase() as 'ASC' | 'DESC') ?? 'ASC');
+    query.orderBy(
+      `inverter.${sortBy}`,
+      (orderBy?.toUpperCase() as 'ASC' | 'DESC') ?? 'ASC',
+    );
 
     const [data, total] = await query.getManyAndCount();
     const pages = Math.ceil(total / size);
@@ -51,8 +55,6 @@ export class InverterService {
         ? dateToTimestamp(new Date(inv.updatedAt))
         : undefined,
     }));
-
-    inverters.forEach((inv) => console.log('updatedAt:', inv.updatedAt));
 
     return {
       inverters,

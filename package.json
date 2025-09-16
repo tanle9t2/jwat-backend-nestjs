@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "proto:gen": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=src/app/grpc/generated --ts_proto_opt=esModuleInterop=true,outputServices=grpc-js,useDate=false -I ./proto ./proto/*.proto"
+    "proto:gen": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=src/grpc/generated --ts_proto_opt=esModuleInterop=true,outputServices=grpc-js,useDate=false -I ./proto ./proto/*.proto"
   },
   "dependencies": {
     "@apollo/server": "^4.12.2",
@@ -26,14 +26,19 @@
     "@grpc/proto-loader": "^0.8.0",
     "@nestjs/apollo": "^13.1.0",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/graphql": "^13.1.0",
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/microservices": "^11.1.6",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "graphql": "^16.11.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

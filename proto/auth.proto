@@ -5,6 +5,7 @@ package auth;
 
 service AuthService {
     rpc validateUser(AuthRequset) returns(AuthResponse);
+    rpc getToken(RefreshTokenRequet) returns(RefreshTokenResponse);
 }
 
 message Empty {
@@ -14,9 +15,17 @@ message AuthRequset {
     string username =1;
     string password =2;
 }
-message AuthResponse {
-    int32 id = 1;
-    string username= 2;
+message AuthResponse {    
+    string accessToken= 1;
+    string refreshToken=2;
+}
+
+message RefreshTokenRequet {
+    int32 sub =1;
+    string username=2;
     string email=3;
     string role =4;
+}
+message RefreshTokenResponse {
+    string accessToken=1;
 }

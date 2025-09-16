@@ -5,13 +5,22 @@ import "google/protobuf/timestamp.proto";
 
 
 service InverterService {
-  rpc FindAll (Empty) returns (InverterListResponse) {}
+  rpc FindAll (InvertersRequest) returns (InverterListResponse) {}
 }
 
 message Empty {
   
 }
 
+message InvertersRequest {
+  optional string inverterCode = 1;
+  optional string inverterName = 2;
+  optional bool isFlag = 3;
+  int32 page = 4;
+  int32 size = 5;
+  optional string sortBy = 6;
+  optional string orderBy = 7;
+}
 message InverterResponse {
   int32 id = 1;
   string inverterName = 2;
